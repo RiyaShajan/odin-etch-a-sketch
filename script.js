@@ -6,27 +6,27 @@ const themeToggle = document.getElementById("themeToggle");
 
 // ---------- CREATE GRID ----------
 function createGrid(size) {
-  // clear old grid
+  // Clear old grid
   container.innerHTML = "";
 
-  // get container size (responsive)
-  const containerSize = container.getBoundingClientRect().width;
-  const squareSize = containerSize / size;
+  // Set up the CSS Grid columns and rows based on 'size'
+  container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+  container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 
-  // create squares
+  // Create squares
   for (let i = 0; i < size * size; i++) {
     const square = document.createElement("div");
     square.classList.add("square");
-
-    square.style.width = `${squareSize}px`;
-    square.style.height = `${squareSize}px`;
+    
+    // Start invisible
     square.style.opacity = 0;
 
-    // draw on hover
+    // Draw on hover
     square.addEventListener("mouseenter", () => {
       const isDarkMode = document.body.classList.contains("dark");
       square.style.backgroundColor = isDarkMode ? "white" : "black";
 
+      // Increment opacity by 0.1 each time
       let opacity = Number(square.style.opacity);
       if (opacity < 1) {
         square.style.opacity = opacity + 0.1;
@@ -37,29 +37,26 @@ function createGrid(size) {
   }
 }
 
-// ---------- DEFAULT GRID ----------
+// ---------- INITIALIZE ----------
 createGrid(16);
 
-// ---------- REFRESH BUTTON ----------
+// ---------- BUTTON EVENTS ----------
 refreshBtn.addEventListener("click", () => {
   createGrid(16);
 });
 
-// ---------- NEW GRID BUTTON ----------
 newGridBtn.addEventListener("click", () => {
   let size = Number(prompt("Enter grid size (max 100):"));
 
   if (size > 0 && size <= 100) {
     createGrid(size);
-  } else {
+  } else if (size !== 0) { // Only alert if they didn't hit cancel
     alert("Please enter a number between 1 and 100");
   }
 });
 
-// ---------- DARK / LIGHT MODE ----------
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
-
   themeToggle.textContent = document.body.classList.contains("dark")
     ? "Light Mode"
     : "Dark Mode";
